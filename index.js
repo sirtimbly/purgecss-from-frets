@@ -1,41 +1,38 @@
-import * as esprima from 'esprima';
 
-export default class PurgeFromJS {
-    static extract(content) {
-        const tokens = esprima.tokenize(content);
-        let selectors = tokens
-            .filter(token => {
-                return (
-                    token.type === 'Identifier' ||
-                    token.type === 'Template' ||
-                    token.type === 'String'
-                );
-            })
-            .reduce((acc, token) => {
-                if (token.type === 'String') {
-                    // cut single/double quotes from the string
-                    // because esprima wraps string to a string
-                    const unwrappedString = token.value.slice(
-                        1,
-                        token.value.length - 1
-                    );
-                    return acc.concat(unwrappedString.split(' ')); // in case if string contains a list of classes
-                } else if (token.type === 'Template') {
-                    // cut backticks from the template
-                    const len = token.value.length;
-                    const isOpenedTemplate = token.value[0] === '`';
-                    const isClosedTemplate = token.value[len - 1] === '`';
-                    const unwrappedTemplate = token.value.slice(
-                        isOpenedTemplate ? 1 : 0,
-                        isClosedTemplate ? len - 1 : len
-                    );
-                    return acc.concat(unwrappedTemplate.split(' '));
-                }
-                return acc.concat(token.value);
-            }, []);
+var changeCase = require("change-case");
+var doublePattern = /\$\$\((.?)\)/g;
+var singlePattern = /\$\.(.+)(\.h\(|)/g;
 
-        // clear selectors from empty strings
-        selectors = selectors.filter(selector => selector !== '');
-        return [...new Set(selectors)]; // remove duplicates
+class PurgeFromFrets {
+  static extract(content) {
+    var selectors = [];
+    var doubles = [];
+    var doubleInProgress;
+    while ((doubleInProgress = doublePattern.exec(content)) != null) {
+      doubles.push(...doubleInProgress[1].split("."));
     }
+    // console.log("Found $$ selectors:" + doubles.join(", "));
+    selectors.push(...doubles);
+    var singles = [];
+    var singlesInProgress;
+    while ((singlesInProgress = singlePattern.exec(content)) != null) {
+      singles.push(...singlesInProgress[1].split("."));
+    }
+    selectors.push(...singles);
+
+    selectors = selectors.map(x => changeCase.paramCase(x));
+    // selectors = selectors.map(x => {
+    //   var matches = x.match(/(m|mx|my|mt|mb|ml|mr|p|px|py|pt|pl|pb|pr)(\d)/)
+    //   if (matches && matches.length === 3 ) {
+    //     return `${matches[1]}-${matches[2]}`;
+    //   } else {
+    //     return x;
+    //   }
+    // })
+
+    // console.log("Found selectors:" + selectors.join(", "));
+    // console.log("Found Selectors in file: " + selectors.length);
+    return selectors;
+  }
 }
+module.exports = PurgeFromFrets;

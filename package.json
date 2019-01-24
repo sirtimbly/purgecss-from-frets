@@ -20,19 +20,21 @@
         "webpack-cli": "^3.1.0"
     },
     "dependencies": {
-        "esprima": "^4.0.1"
+        "@types/change-case": "^2.3.1",
+        "change-case": "^3.1.0"
     },
-    "author": "alinaish",
+    "author": "sirtimbly",
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/FullHuman/purgecss-from-js.git"
+        "url": "git+https://github.com:sirtimbly/purgecss-from-frets.git"
     },
     "keywords": [
         "purgecss-from",
         "purgecss",
         "selectors",
         "css",
-        "js"
+        "ts",
+        "frets"
     ],
-    "homepage": "https://github.com/FullHuman/purgecss-from-js#readme"
+    "homepage": "https://github.com/sirtimbly/purgecss-from-frets#readme"
 }
