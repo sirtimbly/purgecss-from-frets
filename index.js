@@ -19,7 +19,7 @@ class PurgeFromFrets {
       singles.push(...singlesInProgress[1].split("."));
     }
     selectors.push(...singles);
-    selectors = selectors.map(x => x.trim().replace(/[^-a-z0-9]/i, ""));
+    selectors = selectors.map(x => x.trim().replace(/[^-_a-z0-9]/i, ""));
     selectors = selectors.map(x => changeCase.paramCase(x));
     // console.log(selectors);
     // selectors = selectors.map(x => {

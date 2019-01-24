@@ -4,7 +4,7 @@ describe('PurgeFromJS', () => {
     const mockContent = `import { VNode, VNodeProperties } from "maquette";
     import { $, $$ } from "../base-styles";
 
-    const cell = $$("td").borderBottom.borderRight.borderSilver.bgGray_600.p1;
+    const cell = $$("td").borderBottom.borderRight.borderSilver.bgGray600.p1;
     const header = $$("th").borderBottom.borderGray;
     if (!data || data.length <= 0) {
       return $$("table").collapse.h();
@@ -35,10 +35,27 @@ describe('PurgeFromJS', () => {
       }
       return node.h(properties, nodes);
     };
+    return $.div.flex.flexColumn.h([
+        $.div.bgSilver.p2.borderBottom.borderGray.shadow.flex.justifyBetween.Bold.h([
+          $.div.h(["My FRETS App"]),
+        ]),
+        props.messages.length
+          ? alert(props.messages) : "",
+        $grid.h([
+          $.div.col.col_2.smCol.smCol_12.pt2.h([Menu(props, false, actions)]),
+          $.div.col.col_10.smCol.smCol_12.px2.h([
+            (props.activeScreen === SampleScreens.Home)
+              ? renderHome(props, actions, idField)
+              : renderAbout(props, actions),
+          ]),
+        ]),
+        $.input.maxWidth_1.h({
+
+        })
     `;
 
     it('contains all the selectors', () => {
-        const expected = ["border-bottom", "collapse", "full-width", "border-right", "border-silver", "bg-gray600", "p1", "div", "panel", "bg-white", "shadow", "sm-p1", "p3", "my2", "rounded", "left-align", "overflow-auto", "div", "h2", "pb2", "h-title", "flex", "align-middle", "justify-center"]
+        const expected = ["max-width-1", "col-2", "col-10", "sm-col-12", "border-bottom", "collapse", "full-width", "border-right", "border-silver", "bg-gray600", "p1", "div", "panel", "bg-white", "shadow", "sm-p1", "p3", "my2", "rounded", "left-align", "overflow-auto", "div", "h2", "pb2", "h-title", "flex", "align-middle", "justify-center"]
         const selectors = PurgeFromJS.extract(mockContent);
         expect(expected.every(x => {
             var res = selectors.includes(x);
