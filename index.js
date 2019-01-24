@@ -1,7 +1,7 @@
 
 var changeCase = require("change-case");
 var doublePattern = /\$\$\((.?)\)/g;
-var singlePattern = /\.(.+)(\.h\(|\.|;)/g;
+var singlePattern = /\.(\w.+)(\.h\(|\.|;)/g;
 
 class PurgeFromFrets {
   static extract(content) {
@@ -21,6 +21,7 @@ class PurgeFromFrets {
     selectors.push(...singles);
     selectors = selectors.map(x => x.trim().replace(/[^-_a-z0-9]/i, ""));
     selectors = selectors.map(x => changeCase.paramCase(x));
+    selectors = selectors.filter(x => !(["base-styles", "", " ", ].includes(x) || x.length <= 1))
     // console.log(selectors);
     // selectors = selectors.map(x => {
     //   var matches = x.match(/(m|mx|my|mt|mb|ml|mr|p|px|py|pt|pl|pb|pr)(\d)/)
@@ -31,7 +32,7 @@ class PurgeFromFrets {
     //   }
     // })
 
-    // console.log("Found selectors:" + selectors.join(", "));
+    console.log(selectors.join(", "));
     // console.log("Found Selectors in file: " + selectors.length);
     return selectors;
   }
