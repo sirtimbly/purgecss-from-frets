@@ -1,7 +1,7 @@
 
 var changeCase = require("change-case");
 var doublePattern = /\$\$\((.?)\)/g;
-var singlePattern = /\$\.(.+)(\.h\(|)/g;
+var singlePattern = /\.(.+)(\.h\(|\.|;)/g;
 
 class PurgeFromFrets {
   static extract(content) {
@@ -19,8 +19,9 @@ class PurgeFromFrets {
       singles.push(...singlesInProgress[1].split("."));
     }
     selectors.push(...singles);
-
+    selectors = selectors.map(x => x.trim().replace(/[^-a-z0-9]/i, ""));
     selectors = selectors.map(x => changeCase.paramCase(x));
+    // console.log(selectors);
     // selectors = selectors.map(x => {
     //   var matches = x.match(/(m|mx|my|mt|mb|ml|mr|p|px|py|pt|pl|pb|pr)(\d)/)
     //   if (matches && matches.length === 3 ) {

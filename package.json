@@ -1,6 +1,6 @@
 {
     "name": "purgecss-from-frets",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Extractor for FRETS files",
     "main": "index.js",
     "scripts": {
